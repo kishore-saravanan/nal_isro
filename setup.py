@@ -26,7 +26,7 @@ setup(
             'master_node = nal_isro.master_node:main',
             'record_cmd_vel = nal_isro.cmd_vel_recorder:main',
             'publish_cmd_vel_from_csv = nal_isro.publish_cmd_vel_from_csv:main',
-
+            'depth_processor = nal_isro.depth_processor:main',
         ],
     },
 )
