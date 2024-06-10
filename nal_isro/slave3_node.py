@@ -25,8 +25,8 @@ class Slave3Node(Node):
         self.start_time = None  # To store the time when execution starts
         self.goal_reached = None
         self.target_depth = 0.15  # 15 cm
-        self.linear_speed = 0.1  # m/s
-        self.angular_speed = 0.1  # rad/s
+        self.linear_speed = 0.5  # m/s
+        self.angular_speed = 0.5  # rad/s
 
     
     def compute_callback(self, request, response):
@@ -72,14 +72,14 @@ class Slave3Node(Node):
             # Assuming center_x is the horizontal pixel position of the object in the image frame
             # Adjust angular velocity to center the object
             # You may need to adjust the following logic based on your camera's field of view and resolution
-            if msg.center_x < 320:  # Assuming 640x480 resolution, center_x < 320 means object is to the left
+            if msg.center_x < 300:  # Assuming 640x480 resolution, center_x < 320 means object is to the left
                 twist.angular.z = self.angular_speed
-            elif msg.center_x > 320:  # center_x > 320 means object is to the right
+            elif msg.center_x > 340:  # center_x > 320 means object is to the right
                 twist.angular.z = -self.angular_speed
             else:
                 twist.angular.z = 0.0
 
-            if msg.depth < self.target_depth and msg.center_x == 320:
+            if msg.depth < self.target_depth and msg.center_x > 300 and msg.center_x < 340:
                 self.goal_reached = True
                 self.start_exec = False
                 bool_msg = Bool()
