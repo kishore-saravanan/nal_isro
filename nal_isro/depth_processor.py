@@ -50,13 +50,14 @@ class DepthProcessor(Node):
         object_msg.center_x = round(start_x + (width/2))
         object_msg.center_y = round(start_y + (height/2))
 
-        if self.depth_image:
+        if self.depth_image.any():
             print("Received depth image.")
             object_msg.depth = self.depth_image[object_msg.center_y, object_msg.center_x]
+            self.publisher.publish(object_msg)
         else:
-            object_msg.depth = 10.0
+            print("Not received depth image")
 
-        self.publisher.publish(object_msg)
+        
 
     def depth_image_callback(self, msg):
         # Convert ROS Image message to OpenCV image
