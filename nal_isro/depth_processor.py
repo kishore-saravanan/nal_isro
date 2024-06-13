@@ -12,7 +12,7 @@ class DepthProcessor(Node):
         super().__init__('depth_processor')
         self.subscription = self.create_subscription(
             String,
-            '/object_data_str',
+            '/object_data_string',
             self.listener_callback,
             10)
         self.subscription  # prevent unused variable warning
@@ -50,9 +50,11 @@ class DepthProcessor(Node):
         object_msg.center_x = round(start_x + (width/2))
         object_msg.center_y = round(start_y + (height/2))
 
-        object_msg.depth = self.depth_image[object_msg.center_y, object_msg.center_x]
-
-        # object_msg.depth = 1.0
+        if self.depth_image:
+            print("Received depth image.")
+            object_msg.depth = self.depth_image[object_msg.center_y, object_msg.center_x]
+        else:
+            object_msg.depth = 10.0
 
         self.publisher.publish(object_msg)
 
