@@ -23,6 +23,7 @@ setup(
             'slave1_node = nal_isro.slave1_node:main',
             'slave2_node = nal_isro.slave2_node:main',
             'slave3_node = nal_isro.slave3_node:main',
+            'slave5_node = nal_isro.slave5_node:main',
             'master_node = nal_isro.master_node:main',
             'record_cmd_vel = nal_isro.cmd_vel_recorder:main',
             'publish_cmd_vel_from_csv = nal_isro.publish_cmd_vel_from_csv:main',

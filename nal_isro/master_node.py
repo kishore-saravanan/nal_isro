@@ -15,6 +15,7 @@ class MasterNode(Node):
         self.client1 = self.create_client(StringSrv, 'move_waypoint')
         self.client2 = self.create_client(Compute, 'compute2')
         self.client3 = self.create_client(StringSrv, 'compute3')
+        self.client5 = self.create_client(StringSrv, 'compute5')
         self.moved = False
         timer_period = 0.01  # seconds
         #self.timer = self.create_timer(timer_period, self.timer_callback)
@@ -83,6 +84,23 @@ class MasterNode(Node):
 
 #############################################################################################
 
+    def start_task_5(self): # Move towards container
+        str_request = StringSrv.Request()
+        str_request.input = "Start" 
+
+        while not self.client5.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for service compute5 to be available...')
+
+        future5 = self.client3.call_async(str_request)
+
+        rclpy.spin_until_future_complete(self, future5)
+        if future5.result() is not None:
+            self.get_logger().info(f'Result from compute5: {future5.result().result}')
+        else:
+            self.get_logger().error('Failed to call service compute5')
+
+#############################################################################################
+    
     def moved_callback(self, msg):
         if msg.data == True:
             self.moved = True

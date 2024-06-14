@@ -5,6 +5,7 @@ from sensor_msgs.msg import Image
 from isro_msgs.msg import ObjectData
 import cv2
 from cv_bridge import CvBridge
+import math
 
 class DepthProcessor(Node):
 
@@ -45,23 +46,28 @@ class DepthProcessor(Node):
         # print(f"height = {height}")
         # print(f"confidence = {confidence}")
 
-        object_msg = ObjectData()
-        object_msg.name = name
-        object_msg.center_x = round(start_x + (width/2))
-        object_msg.center_y = round(start_y + (height/2))
+        if name == "container":
+            object_msg = ObjectData()
+            object_msg.name = name
+            object_msg.center_x = round(start_x + (width/2))
+            object_msg.center_y = round(start_y + (height/2))
 
-        if self.depth_image.any():
-            print("Received depth image.")
-            object_msg.depth = self.depth_image[object_msg.center_y, object_msg.center_x]
-            self.publisher.publish(object_msg)
-        else:
-            print("Not received depth image")
+            if self.depth_image is not None:
+                depth_value = self.depth_image[object_msg.center_y, object_msg.center_x]
+                if not math.isnan(depth_value):
+                    print("Received depth image.")
+                    object_msg.depth = self.depth_image[object_msg.center_y, object_msg.center_x]
+                    self.publisher.publish(object_msg)
+                else:
+                    print("Depth value is invalid")
+            else:
+                print("Not received depth image or depth value is invalid")
 
         
 
     def depth_image_callback(self, msg):
         # Convert ROS Image message to OpenCV image
-        self.depth_image = self.br.imgmsg_to_cv2(msg, desired_encoding='passthrough')
+        self.depth_image = cv2.resize(self.br.imgmsg_to_cv2(msg, desired_encoding='passthrough'), (640, 640))
 
         # # Define the coordinate you want to check the depth for
         # u = 320  # x-coordinate
