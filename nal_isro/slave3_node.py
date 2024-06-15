@@ -21,10 +21,10 @@ class Slave3Node(Node):
         self.moved_publisher = self.create_publisher(Bool, 'moved_bool', 10)
         timer_period = 0.01  # seconds
         #self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.start_exec = False
+        self.start_exec = True
         self.start_time = None  # To store the time when execution starts
         self.goal_reached = None
-        self.target_depth = 0.75  # 15 cm
+        self.target_depth = 0.72  # 15 cm
         self.linear_speed = 0.5  # m/s
         self.angular_speed = 0.5  # rad/s
 

@@ -46,18 +46,20 @@ class DepthProcessor(Node):
         # print(f"height = {height}")
         # print(f"confidence = {confidence}")
 
-        if name == "container" or name =="sample":
+        if name == "container" or name == "sample":
             object_msg = ObjectData()
             object_msg.name = name
             object_msg.center_x = round(start_x + (width/2))
             object_msg.center_y = round(start_y + (height/2))
 
             if self.depth_image is not None:
-                depth_value = self.depth_image[object_msg.center_y, object_msg.center_x]
+                print(object_msg.center_x, object_msg.center_y)
+                depth_value = float(self.depth_image[object_msg.center_y, object_msg.center_x])
                 if not math.isnan(depth_value):
                     print("Received depth image.")
-                    object_msg.depth = self.depth_image[object_msg.center_y, object_msg.center_x]
+                    object_msg.depth = float(self.depth_image[object_msg.center_y, object_msg.center_x])
                     self.publisher.publish(object_msg)
+                    
                 else:
                     print("Depth value is invalid")
             else:

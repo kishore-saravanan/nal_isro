@@ -21,7 +21,7 @@ class Slave2Node(Node):
         self.moved_publisher = self.create_publisher(Bool, 'moved_bool', 10)
         timer_period = 0.01  # seconds
         #self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.start_exec = False
+        self.start_exec = True
         self.start_time = None  # To store the time when execution starts
         self.goal_reached = None
         self.target_depth = 0.75  # 15 cm
@@ -74,12 +74,12 @@ class Slave2Node(Node):
             # You may need to adjust the following logic based on your camera's field of view and resolution
             if msg.center_x < 340:  # Assuming 640x480 resolution, center_x < 320 means object is to the left
                 twist.angular.z = self.angular_speed
-            elif msg.center_x > 380:  # center_x > 320 means object is to the right
+            elif msg.center_x > 370:  # center_x > 320 means object is to the right
                 twist.angular.z = -self.angular_speed
             else:
                 twist.angular.z = 0.0
 
-            if msg.depth < self.target_depth and msg.center_x > 340 and msg.center_x < 380:
+            if msg.depth < self.target_depth and msg.center_x > 340 and msg.center_x < 370:
                 self.goal_reached = True
                 self.start_exec = False
                 bool_msg = Bool()
