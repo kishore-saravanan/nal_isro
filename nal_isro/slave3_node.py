@@ -56,7 +56,7 @@ class Slave3Node(Node):
     #             self.get_logger().info('Stopped publishing cmd_vel after 5 seconds')
 
     def object_info_callback(self, msg):
-        if self.start_exec:
+        if self.start_exec and not self.goal_reached and msg.name == "container":
             self.get_logger().info(f'Received object info: {msg.name} at ({msg.center_x}, {msg.center_y}), depth: {msg.depth}m')
             
             # Calculate control commands
@@ -72,14 +72,14 @@ class Slave3Node(Node):
             # Assuming center_x is the horizontal pixel position of the object in the image frame
             # Adjust angular velocity to center the object
             # You may need to adjust the following logic based on your camera's field of view and resolution
-            if msg.center_x < 300:  # Assuming 640x480 resolution, center_x < 320 means object is to the left
+            if msg.center_x < 340:  # Assuming 640x480 resolution, center_x < 320 means object is to the left
                 twist.angular.z = self.angular_speed
-            elif msg.center_x > 340:  # center_x > 320 means object is to the right
+            elif msg.center_x > 380:  # center_x > 320 means object is to the right
                 twist.angular.z = -self.angular_speed
             else:
                 twist.angular.z = 0.0
 
-            if msg.depth < self.target_depth and msg.center_x > 300 and msg.center_x < 340:
+            if msg.depth < self.target_depth and msg.center_x > 340 and msg.center_x < 380:
                 self.goal_reached = True
                 self.start_exec = False
                 bool_msg = Bool()

@@ -13,7 +13,7 @@ class MasterNode(Node):
             10
         )
         self.client1 = self.create_client(StringSrv, 'move_waypoint')
-        self.client2 = self.create_client(Compute, 'compute2')
+        self.client2 = self.create_client(StringSrv, 'compute2')
         self.client3 = self.create_client(StringSrv, 'compute3')
         self.client5 = self.create_client(StringSrv, 'compute5')
         self.moved = False
@@ -57,7 +57,7 @@ class MasterNode(Node):
         while not self.client2.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Waiting for service compute2 to be available...')
 
-        future2 = self.client2.call_async(request)
+        future2 = self.client2.call_async(str_request)
 
         rclpy.spin_until_future_complete(self, future2)
         if future2.result() is not None:

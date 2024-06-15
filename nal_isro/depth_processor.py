@@ -46,7 +46,7 @@ class DepthProcessor(Node):
         # print(f"height = {height}")
         # print(f"confidence = {confidence}")
 
-        if name == "container":
+        if name == "container" or name =="sample":
             object_msg = ObjectData()
             object_msg.name = name
             object_msg.center_x = round(start_x + (width/2))

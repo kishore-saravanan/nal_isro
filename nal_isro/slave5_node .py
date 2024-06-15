@@ -21,7 +21,7 @@ class Slave5Node(Node):
         self.moved_publisher = self.create_publisher(Bool, 'moved_bool', 10)
         timer_period = 0.01  # seconds
         #self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.start_exec = False
+        self.start_exec = True
         self.start_time = None  # To store the time when execution starts
         self.goal_reached = None
         self.target_depth = 2.0  # 15 cm
@@ -56,7 +56,7 @@ class Slave5Node(Node):
     #             self.get_logger().info('Stopped publishing cmd_vel after 5 seconds')
 
     def object_info_callback(self, msg):
-        if self.start_exec:
+        if self.start_exec and not self.start_exec and msg.name == "container":
             self.get_logger().info(f'Received object info: {msg.name} at ({msg.center_x}, {msg.center_y}), depth: {msg.depth}m')
             
             # Calculate control commands
